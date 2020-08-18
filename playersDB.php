@@ -7,18 +7,9 @@
 </head>
 <body>
     <div class=wrapper>
-        <div class="box a" id="header">
-            <nav>
-                <li>
-                    <a href="index.html">Home</a>
-                    <a href="playersDB.html">Players Database</a>
-                    <a href="leagues.html">Leagues</a>
-                    <a href="how_it_works.html">How does this work?</a>
-                    <a href="rules.html">Rules</a>
-                    <a href="about.html">About</a>
-                </li>
-            </nav>
-        </div>
+        <?php
+            include ("nav_links.html");
+        ?>
 
 
         <div class="box ab" id="aTitle"> Racket Fury PSVR Box Leagues</div>

@@ -11,19 +11,11 @@
 <body>
 
     <div class=wrapper>
-        <div class="box a" id="header">
-            <nav>
-                <li>
-                    <a href="index.html">Home</a>
-                    <a href="playersDB.html">Players Database</a>
-                    <a href="leagues.html">Leagues</a>
-                    <a href="how_it_works.html">How does this work?</a>
-                    <a href="rules.html">Rules</a>
-                    <a href="about.html">About</a>
-                </li>
-            </nav>
-        </div>
-
+        
+        <!-- Load navbar links from nav_links.html -->
+        <?php
+            include ("nav_links.html");
+        ?>
 
         <div class="box b" id="title"> Racket Fury PSVR Box Leagues</div>
         <div class="box c" id="subtitle1">A Racket Fury Non Profit Community Fan Website</div>
@@ -36,7 +28,7 @@
             <div id="reg">Regiser your PSN ID and country server to join the leagues</div>
             <button id="regBtn">Register</button>
         </div>
-        
+
         <div class="box f">
             <div id="joinLg">Join a division/league</div>
             <button id="joinLgBtn">Join Leagues</button>
