@@ -9,13 +9,12 @@
 </head>
 
 <body>
+    <?php require ("config.php"); ?>
 
     <div class=wrapper>
-        
+
         <!-- Load navbar links from nav_links.html -->
-        <?php
-            include ("nav_links.html");
-        ?>
+        <?php include ("nav_links.html"); ?>
 
         <div class="box b" id="title"> Racket Fury PSVR Box Leagues</div>
         <div class="box c" id="subtitle1">A Racket Fury Non Profit Community Fan Website</div>
@@ -26,7 +25,7 @@
 
         <div class="box e">
             <div id="reg">Regiser your PSN ID and country server to join the leagues</div>
-            <button id="regBtn">Register</button>
+            <button type="button" id="regBtn" onclick="register.php">Register</button>
         </div>
 
         <div class="box f">
@@ -46,12 +45,12 @@
 
         <div class="box i">
             <div id="matchResults">Enter your match results</div>
-            <button id="lgResultsBtn">Submit</button>
+            <button id="matchReslutsBtn">Submit</button>
         </div>
 
         <div class="box j">
             <div id="profile">Your Profile and History</div>
-            <button id="lgResultsBtn">Profile</button>
+            <button id="profileBtn">Profile</button>
         </div>
 
     </div>
