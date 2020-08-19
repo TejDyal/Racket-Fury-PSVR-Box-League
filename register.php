@@ -13,6 +13,18 @@
     //connect to db
     require("config.php");
     include("nav_links.html");
+
+    //declaring variables to prevent errors
+    $psn = $serverName = $email = $enterLeague = $password = $password2 = $dateOfReg = $error_array = ""; 
+
+    //validating and stripping inputs on form
+    if(isset($_POST['psn'])) {
+        $psn = strip_tags($_POST['psn']);
+        $psn = str_replace(' ','',$psn);
+        $psn = define($psn,null,true);
+    } 
+    
+
     ?>
 
     <form action="register.php" method="POST">
@@ -52,7 +64,15 @@
             </select>
         </div>
 
+        <div class="box rege" id="password">
+            <label for="password">Create a password</label>
+            <input type="password" name="password">
+        </div>
 
+        <div class="box regf" id="password2">
+            <label for="password2">Confirm your new password</label>
+            <input type="password" name="password2">
+        </div>
 
     </form>
 
