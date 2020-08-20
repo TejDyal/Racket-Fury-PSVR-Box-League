@@ -31,6 +31,9 @@
     if ($email != $confirmEmail) {
         echo "emails don't match";
     }
+    else {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL))
+    }
     // TODO: add a check for "." in email address    
     if(isset($_POST['password'])) {
         $password = strip_tags($_POST['password']);
