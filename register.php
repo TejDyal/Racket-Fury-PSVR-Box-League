@@ -14,22 +14,42 @@
     require("config.php");
     include("nav_links.html");
 
-    //declaring variables to prevent errors
-    $psn = $serverName = $email = $enterLeague = $password = $password2 = $dateOfReg = $error_array = ""; 
+    //declaring variables to prevent errors and hacking
+    $psn = $serverName = $email = $confirmEmail = $enterLeague = $password = $confirmPwd = $dateOfReg = $error_array = ""; 
 
     //validating and stripping inputs on form
     if(isset($_POST['regBtn'])) {
         $psn = strip_tags($_POST['psn']);
         $psn = str_replace(' ','',$psn);
     } 
-    
+    if(isset($_POST['email'])) {
+        $email = $_POST['email'];
+    } 
+    if(isset($_POST['confirmEmail'])) {
+        $confirmEmail = $_POST['confirmEmail'];
+    } 
+    if ($email != $confirmEmail) {
+        echo "emails don't match";
+    }
+    // TODO: add a check for "." in email address    
+    if(isset($_POST['password'])) {
+        $password = strip_tags($_POST['password']);
+    } 
+    if(isset($_POST['confirmPwd'])) {
+        $confirmPwd = strip_tags($_POST['confirmPwd']);
+    } 
+    if ($password != $confirmPwd) {
+        echo "passwords don't match";
+    }
+
+    $dateOfReg = date("Y-m-d");
 
     ?>
 
     <form action="register.php" method="POST">
         <div class="box rega"><label for="psn">What is your PSN ID?</label>
             <input type="text" name="psn" required>
-            <!-- need code here to test if player already exists on db, and if so, test if has a login. If no login, then continue with form.  If user has a login then go to login form. -->
+            <!-- TODO: need code here to test if player already exists on db, and if so, test if has a login. If no login, then continue with form.  If user has a login then go to login form. -->
         </div>
 
         <div class="box regb" id="serverSelect">
@@ -55,7 +75,12 @@
             <input type="email" name="email">
         </div>
 
-        <div class="box regd" id="enterLeague">
+        <div class="box regd" id="confirmEmail">
+            <label for="confirmEmail">Confirm Email</label>
+            <input type="email" name="confirmEmail">
+        </div>
+
+        <div class="box rege" id="enterLeague">
             <label for="enterLeague">Would you like to enter yourself into next season's league? </label>
             <select name="enterLeague" required>
                 <option value="yes">Yes please!</option>
@@ -63,17 +88,17 @@
             </select>
         </div>
 
-        <div class="box rege" id="password">
+        <div class="box regf" id="password">
             <label for="password">Create a password</label>
             <input type="password" name="password">
         </div>
 
-        <div class="box regf" id="password2">
-            <label for="password2">Confirm your new password</label>
-            <input type="password" name="password2">
+        <div class="box regg" id="confirmPwd">
+            <label for="confirmPwd">Confirm your new password</label>
+            <input type="password" name="confirmPwd">
         </div>
 
-        <div class="box regg" id="submit">
+        <div class="box regh" id="submit">
             <label for="submit">Submit Form</label>
             <input type="submit" name="regBtn" value="register">
         </div>
