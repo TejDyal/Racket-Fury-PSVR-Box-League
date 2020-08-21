@@ -1,10 +1,14 @@
 <?php
-$servername = "localhost:3306";
-$username = "Normal User";
-$password = "password";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password);
+
+function connectToDB ($conn) {
+  $servername = "localhost:3306";
+  $username = "Normal User";
+  $password = "password";
+  $conn = new mysqli($servername, $username, $password);
+  return $conn;
+}
 
 // Check connection
 /* if ($conn->connect_error) {
@@ -12,5 +16,3 @@ $conn = new mysqli($servername, $username, $password);
 } else {
     echo "Connected successfully";
 } */
-
-?>

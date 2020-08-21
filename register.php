@@ -11,41 +11,60 @@
 <body>
     <?php
     //connect to db
-    require("config.php");
+    $servername = "localhost:3306";
+    $username = "Normal User";
+    $password = "password";
+    $db = "rf_league_db";
+    $conn = new mysqli($servername, $username, $password, $db);
     include("nav_links.html");
 
     //declaring variables to prevent errors and hacking
-    $psn = $serverName = $email = $confirmEmail = $enterLeague = $password = $confirmPwd = $dateOfReg = $error_array = ""; 
+    $psn = $serverName = $email = $confirmEmail = $enterLeague = $password = $confirmPwd = $dateOfReg = $error_array = "";
 
     //validating and stripping inputs on form
-    if(isset($_POST['regBtn'])) {
-        $psn = strip_tags($_POST['psn']);
-        $psn = str_replace(' ','',$psn);
-    } 
-    if(isset($_POST['email'])) {
-        $email = $_POST['email'];
-    } 
-    if(isset($_POST['confirmEmail'])) {
-        $confirmEmail = $_POST['confirmEmail'];
-    } 
-    if ($email != $confirmEmail) {
-        echo "emails don't match";
-    }
-    else {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL))
-    }
-    // TODO: add a check for "." in email address    
-    if(isset($_POST['password'])) {
-        $password = strip_tags($_POST['password']);
-    } 
-    if(isset($_POST['confirmPwd'])) {
-        $confirmPwd = strip_tags($_POST['confirmPwd']);
-    } 
-    if ($password != $confirmPwd) {
-        echo "passwords don't match";
-    }
+    if (isset($_POST['regBtn'])) {
 
-    $dateOfReg = date("Y-m-d");
+        $psn = strip_tags($_POST['psn']);
+        $psn = str_replace(' ', '', $psn);
+        $email = $_POST['email'];
+        $confirmEmail = $_POST['confirmEmail'];
+
+        if ($email == $confirmEmail) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+                $emailCheck = mysqli_query($conn, "SELECT Email FROM player WHERE Email = '$email'");
+                $numRows = mysqli_num_rows($emailCheck);
+                //echo "Error: " . mysqli_error($conn);
+                //echo $numRows;
+                if ($numRows > 0) {
+                    echo "this email aready exists";
+                } else {
+                    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+                }
+            } else {
+                echo "email is not a valid format";
+            }
+        } else {
+            echo "emails don't match";
+        }
+
+        $password = strip_tags($_POST['password']);
+        $confirmPwd = strip_tags($_POST['confirmPwd']);
+
+        if ($password != $confirmPwd) {
+            echo "passwords don't match";
+        }
+        else {
+            if(!preg_match("/^[a-zA-Z0-9]$/", $password)) {
+                echo "password can only contain English characters or numbers";
+            }
+            else {
+                echo "password is fine";
+            }
+        }
+
+        $dateOfReg = date("Y-m-d");
+    }
 
     ?>
 
@@ -74,13 +93,13 @@
         </div>
 
         <div class="box regc" id="email">
-            <label for="email">Your email address (optional but recommended to receive update news on leagues and results. No one else can see your email address)</label>
-            <input type="email" name="email">
+            <label for="email">Your email address (optional but recommended to receive league updates. No one can see your email)</label>
+            <input type="email" name="email" placeholder="Email address (optional)">
         </div>
 
         <div class="box regd" id="confirmEmail">
-            <label for="confirmEmail">Confirm Email</label>
-            <input type="email" name="confirmEmail">
+            <label for="confirmEmail">Confirm your email</label>
+            <input type="email" name="confirmEmail" placeholder="Confirm Email">
         </div>
 
         <div class="box rege" id="enterLeague">
