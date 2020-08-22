@@ -15,12 +15,23 @@
     $username = "Normal User";
     $pwd = "password";
     $db = "rf_league_db";
-    $conn = new mysqli($servername, $username, $pwd, $db);
+    $conn = mysqli_connect($servername, $username, $pwd, $db);
     include("nav_links.html");
 
     //declaring variables to prevent errors and hacking
     $psn = $serverName = $email = $confirmEmail = $enterLeague = $password = $confirmPwd = $dateOfReg = "";
     $errorArray = array();
+    $serverArray = array();
+
+    //fetch Racket Fury server list from db
+    $result = mysqli_query($conn, "SELECT serverName FROM server");
+    if(mysqli_num_rows($result)> 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($serverArray, $row["serverName"]);
+        }
+    }
+
+    
 
     //validating and stripping inputs on form
     if (isset($_POST['regBtn'])) {
@@ -89,26 +100,23 @@
     <form action="register.php" method="POST">
         <div class="box rega"><label for="psn">What is your PSN ID?</label>
             <input type="text" name="psn" value="<?php echo $psn ?>" required>
-            <?php if (in_array("Invalid PSN ID<br>", $errorArray)) echo "Invalid PSN ID<br>";
-            else if(in_array("this PSN ID aready exists<br>", $errorArray)) echo "this PSN ID aready exists<br>" ?>
-            <!-- TODO: need code here to test if player already exists on db, and if so, test if has a login. If no login, then continue with form.  If user has a login then go to login form. -->
+            <?php 
+            if (in_array("Invalid PSN ID<br>", $errorArray)) echo "Invalid PSN ID<br>";
+            else if (in_array("this PSN ID aready exists<br>", $errorArray)) echo "this PSN ID aready exists<br>" 
+            ?>
+            <!-- TODO: need code here to test if player already exists on db (DONE), and if so, test if has a login. If no login, then continue with form.  If user has a login then go to login form. -->
         </div>
 
         <div class="box regb" id="serverSelect">
             <label for="server">Select your local server:</label>
             <select name="server" required>
-                <option value="europe">Europe</option>
-                <option value="usaeast">USA East</option>
-                <option value="usawest">USA West</option>
-                <option value="australia">Australia</option>
-                <option value="Asia">Asia</option>
-                <option value="canada">Canada East</option>
-                <option value="india">India</option>
-                <option value="japan">Japan</option>
-                <option value="russia">Russia</option>
-                <option value="russiaeast">Russia East</option>
-                <option value="samerica">South America</option>
-                <option value="skorea">South Korea</option>
+                <?php 
+                foreach ($serverArray AS $server) {                
+                ?>
+                <option value="<?php echo str_replace(' ','', strtolower($server)); ?>"><?php echo $server; ?> </option>
+                <?php
+                }
+                ?>
             </select>
         </div>
 
@@ -120,7 +128,8 @@
         <div class="box regd" id="confirmEmail">
             <label for="confirmEmail">Confirm your email</label>
             <input type="email" name="confirmEmail" placeholder="Confirm Email" value="<?php echo $confirmEmail ?>">
-            <?php if (in_array("this email aready exists<br>", $errorArray)) echo "this email aready exists<br>";
+            <?php 
+            if (in_array("this email aready exists<br>", $errorArray)) echo "this email aready exists<br>";
             else if (in_array("email is not a valid email format<br>", $errorArray)) echo "email is not a valid email format<br>";
             else if (in_array("emails don't match<br>", $errorArray)) echo "emails don't match<br>";
             ?>
@@ -144,7 +153,8 @@
         <div class="box regg" id="confirmPwd">
             <label for="confirmPwd">Confirm your new password</label>
             <input type="password" name="confirmPwd" required>
-            <?php if (in_array("passwords don't match<br>", $errorArray)) echo "passwords don't match<br>";
+            <?php
+            if (in_array("passwords don't match<br>", $errorArray)) echo "passwords don't match<br>";
             else if (in_array("password can only contain English characters or numbers<br>", $errorArray)) echo "password can only contain English characters or numbers<br>";
             else if (in_array("password length must be between 5 and 25 characters<br>", $errorArray)) echo "password length must be between 5 and 25 characters<br>";
             ?>
