@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,13 +12,24 @@
 
 <body>
     <?php
+
     //connect to db
+
+    //TODO find out how to connect to the db without showing the password inside the php code or how to hide the php code from front end user.
+
     $servername = "localhost:3306";
     $username = "Normal User";
     $pwd = "password";
     $db = "rf_league_db";
     $conn = mysqli_connect($servername, $username, $pwd, $db);
     include("nav_links.html");
+
+
+    // Check connection
+  /*   if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    echo "Connected successfully"; */
 
     //declaring variables to prevent errors and hacking
     $psn = $email = $confirmEmail = $enterLeague = $password = $confirmPwd = $dateOfReg = "";
@@ -30,7 +43,6 @@
             array_push($serverNames, $row["serverName"]);
         }
     }
-
 
 
     //validating inputs on form and prepping the values before sending to DB
@@ -50,30 +62,34 @@
             array_push($errorArray, "Invalid PSN ID<br>");
         }
 
-        
+
         $serverNameSelected = $_POST['server'];
 
+        if ($_POST['email'] != null) {
+            $email = $_POST['email'];
+            $confirmEmail = $_POST['confirmEmail'];
 
-        $email = $_POST['email'];
-        $confirmEmail = $_POST['confirmEmail'];
+            if ($email == $confirmEmail) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-        if ($email == $confirmEmail) {
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $emailCheck = mysqli_query($conn, "SELECT Email FROM player WHERE Email = '$email'");
+                    $numRows = mysqli_num_rows($emailCheck);
 
-                $emailCheck = mysqli_query($conn, "SELECT Email FROM player WHERE Email = '$email'");
-                $numRows = mysqli_num_rows($emailCheck);
-
-                if ($numRows > 0) {
-                    array_push($errorArray, "this email aready exists<br>");
+                    if ($numRows > 0) {
+                        array_push($errorArray, "this email aready exists<br>");
+                    } else {
+                        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+                    }
                 } else {
-                    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+                    array_push($errorArray, "email is not a valid email format<br>");
                 }
             } else {
-                array_push($errorArray, "email is not a valid email format<br>");
+                array_push($errorArray, "emails don't match<br>");
             }
-        } else {
-            array_push($errorArray, "emails don't match<br>");
         }
+
+
+
 
         $enterLeague = $_POST['enterLeague'];
 
@@ -94,12 +110,12 @@
             }
         }
 
-        
+
         // on no errors after sbmitting form, prep other information before sending to DB
         if (empty($errorArray)) {
 
             $dateOfReg = date("Y-m-d");
-        
+
             //encrypt password
             $password = md5($password);
 
@@ -109,23 +125,49 @@
                 $rand = rand(2, count($pics) - 1);
                 $profilePic = $pics[$rand];
             } while (!preg_match("/\.png$/i", $profilePic));
-            echo $profilePic;
 
             //match server id rom DB for the servername selected
             $result = mysqli_query($conn, "SELECT Server_id FROM server WHERE serverName = ('$serverNameSelected')");
             $row = mysqli_fetch_assoc($result);
             $serverId = $row["Server_id"];
+
+            //submit form data to DB
+            if (preg_match("/[@]/", $email)) {
+                $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `Email`, `activeInLeague`, `enterInNextLeague`, `standard`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn','$email', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
+            } else {
+                $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `activeInLeague`, `enterInNextLeague`, `standard`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
+            }
+
+
+           /*  if (!$result) {
+                print_r(mysqli_error_list($conn));
+            } else {
+                echo "Success";
+            } */
+
+            if ($enterLeague == 1) {
+                if (preg_match("/[@]/", $email)) {
+                    array_push($errorArray, "<span style = 'color: #F54E05'>Registration complete! You have been entered into next league and will be notified of your division and league commencement within two days before it starts</span><br>");
+                } else {
+                    // TODO  Debug why this part is never executed
+
+                    array_push($errorArray, "<span style = 'color: #F54E05'>Registration complete! You have been entered into next league.  As you have not given an email address, please check back within two days of the league starting to see the players in your divison and arrange league matches with them. Or update your profile anytime before then to add your email address. </span><br>");
+                    echo "enter next league but no email";
+                }
+            } else {
+                array_push($errorArray, "<span style = 'color: #F54E05'>Registration complete! You selected not to be entered into next league but you can change your mind anytime upto three days before it starts.  In the meantime, you can arrange friendly matches with players on this site's database</span><br>");
+            }
+            echo $errorArray[0];
+
+            //reset all variables
+            $vars = array_keys(get_defined_vars());
+            foreach ($vars as $var) {
+                unset(${"$var"});
+            }
+
+            // header("Location: index.php");
+            exit;
         }
-
-        //submit form data to DB
-        $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `Email`, `activeInLeague`, `enterInNextLeague`, `standard`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn','$email', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
-
-        if (!$result) {
-            print_r(mysqli_error_list($conn));
-        }
-        else{ echo "Success"; }
-
-
     }
 
 
@@ -178,9 +220,9 @@
             <label for="enterLeague">Would you like to enter yourself into next season's league? </label>
             <select name="enterLeague" required>
                 <option value=1 <?php if (isset($_POST['enterLeague']) && $_POST['enterLeague'] == 1)
-                                        echo 'selected= "selected"' ?>>Yes please!</option>
+                                    echo 'selected= "selected"' ?>>Yes please!</option>
                 <option value=0 <?php if (isset($_POST['enterLeague']) && $_POST['enterLeague'] == 0)
-                                        echo 'selected= "selected"' ?>>Not right now, but maybe later!</option>
+                                    echo 'selected= "selected"' ?>>Not right now, but maybe later!</option>
             </select>
         </div>
 
@@ -188,11 +230,11 @@
             <label for="selfRating">How do you rate your playing ability?</label>
             <select name="selfRating" required>
                 <option value="Beginner" <?php if (isset($_POST['selfRating']) && $_POST['selfRating'] == 'Beginner')
-                                        echo 'selected= "selected"' ?>>Beginner!</option>
+                                                echo 'selected= "selected"' ?>>Beginner!</option>
                 <option value="Average" <?php if (isset($_POST['selfRating']) && $_POST['selfRating'] == 'Average')
-                                        echo 'selected= "selected"' ?>>Average</option>
+                                            echo 'selected= "selected"' ?>>Average</option>
                 <option value="Good" <?php if (isset($_POST['selfRating']) && $_POST['selfRating'] == 'Good')
-                                        echo 'selected= "selected"' ?>>Good</option>
+                                            echo 'selected= "selected"' ?>>Good</option>
 
 
             </select>
