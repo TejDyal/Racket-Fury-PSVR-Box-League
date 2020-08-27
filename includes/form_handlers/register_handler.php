@@ -62,7 +62,21 @@ if (isset($_POST['regBtn'])) {
 
     $enterLeague = $_POST['enterLeague'];
 
-    $selfRating = $_POST['selfRating'];
+    $selfRatingStr = $_POST['selfRating'];
+    switch ($selfRatingStr) {
+        case "Good":
+            $selfRating = 1;
+            break;
+        case "Average":
+            $selfRating = 2;
+            break;
+        case "Beginner":
+            $selfRating = 3;
+            break;
+        default:
+            $selfRating = 2;
+    }
+
 
     $password = strip_tags($_POST['password']);
     $confirmPwd = strip_tags($_POST['confirmPwd']);
@@ -102,9 +116,9 @@ if (isset($_POST['regBtn'])) {
 
         //submit form data to DB
         if (preg_match("/[@]/", $email)) {
-            $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `Email`, `activeInLeague`, `enterInNextLeague`, `standard`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn','$email', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
+            $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `Email`, `activeInLeague`, `enterInNextLeague`, `selfRating`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn','$email', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
         } else {
-            $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `activeInLeague`, `enterInNextLeague`, `standard`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
+            $result = mysqli_query($conn, "INSERT INTO player (`PSN_id`, `activeInLeague`, `enterInNextLeague`, `selfRating`, `Server_id`, `dateRegistered`, `pwd`, `profilePic`) VALUES ('$psn', '0', '$enterLeague', '$selfRating', '$serverId', '$dateOfReg', '$password', '$profilePic')");
         }
 
 
