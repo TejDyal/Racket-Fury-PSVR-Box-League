@@ -8,14 +8,11 @@ PSUEDO CODE
 
 Admin sets up a new season 
 
-
 add new league-season in League-season table
-
 insert dates for new season into league-season table
-
 add new season number to season table if it doesn't exist.
 
-First sesason players sorting into divisions will be based on self assessment but future seasons will be based on previous season performance and self assessment for new players.
+First sesason players sorting into divisions will be based on self assessment but future seasons will be based on promotions and demotions from previous season division standings and self assessment for new players.  
 
 
 [
