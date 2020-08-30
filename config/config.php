@@ -5,7 +5,8 @@
 //TODO find out how to connect to the db without showing the password inside the php code or how to hide the php code from front end user.
 
 ob_start(); //Turns on output buffering...code efficiency practice
-$timeZone = date_default_timezone_set("Europe/London");
+session_start();
+$timeZone = date_default_timezone_set("UTC");  // players will be arranging matches from different time zones so best maker UTC a reference
 
 $servername = "localhost:3306";
 $username = "Normal User";

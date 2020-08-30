@@ -1,8 +1,9 @@
 <?php
-
 include("nav_links.html");
 
 require 'config\config.php';
+
+require 'includes\form_handlers\login_handler.php';
 require 'includes\form_handlers\register_handler.php';
 
 ?>
@@ -17,6 +18,24 @@ require 'includes\form_handlers\register_handler.php';
 </head>
 
 <body>
+    <!-- Login Form -->
+    <form action="register.php" method="POST">
+        <div class="box logina" id="loginEmail">
+            <label for="loginEmail">Email:</label>
+            <input type="email" name="loginEmail" placeholder="Email address">
+        </div>
+
+        <div class="box loginb" id="loginPwd">
+            <label for="loginPwd">Password:</label>
+            <input type="password" name="loginPwd" placeholder="Password">
+        </div>
+
+        <div class="box logc" id="loginSubmit">
+            <input type="submit" name="loginBtn" value="Log In">
+        </div>
+    </form>
+
+    <!-- Registration Form -->
     <form action="register.php" method="POST">
         <div class="box rega"><label for="psn">What is your PSN ID?</label>
             <input type="text" name="psn" value="<?php echo $psn ?>" required>
