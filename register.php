@@ -2,9 +2,8 @@
 include("nav_links.html");
 
 require 'config\config.php';
-
-require 'includes\form_handlers\login_handler.php';
 require 'includes\form_handlers\register_handler.php';
+require 'includes\form_handlers\login_handler.php';
 
 ?>
 
@@ -22,17 +21,26 @@ require 'includes\form_handlers\register_handler.php';
     <form action="register.php" method="POST">
         <div class="box logina" id="loginEmail">
             <label for="loginEmail">Email:</label>
-            <input type="email" name="loginEmail" placeholder="Email address">
+            <input type="email" name="loginEmail" placeholder="Email address" value = "<?php 
+                if(isset($_SESSION['loginEmail'])) {
+                    echo $_SESSION['loginEmail'];
+                } ?>" required>
         </div>
 
         <div class="box loginb" id="loginPwd">
             <label for="loginPwd">Password:</label>
-            <input type="password" name="loginPwd" placeholder="Password">
+            <input type="password" name="loginPwd" placeholder="Password" required>
         </div>
 
         <div class="box logc" id="loginSubmit">
             <input type="submit" name="loginBtn" value="Log In">
         </div>
+
+        <?php
+            if(in_array("Email or password is incorrect<br>", $errorArray)) {
+                echo "Email or password is incorrect<br>";
+            }
+        ?>
     </form>
 
     <!-- Registration Form -->

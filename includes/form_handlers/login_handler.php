@@ -9,7 +9,7 @@ if (isset($_POST['loginBtn'])) {
     //echo $loginPwd;
 
     $queryResult = mysqli_query($conn, "SELECT * FROM player where Email = '$loginEmail' AND pwd = '$loginPwd'");
-    print_r($queryResult);
+    //print_r($queryResult);
     $checkLoginQuery = mysqli_num_rows($queryResult);
     //echo $checkLoginQuery;
 
@@ -21,4 +21,8 @@ if (isset($_POST['loginBtn'])) {
         header("Location: index.php");
         exit();
     }
+    else {
+        array_push($errorArray, "Email or password is incorrect<br>");
+    }
+    
 }
