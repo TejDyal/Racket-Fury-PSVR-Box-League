@@ -148,7 +148,7 @@ if (isset($_POST['regBtn'])) {
             unset(${"$var"});
         }
 
-        // header("Location: index.php");
+        header("Location: ../index.php");
         exit;
     }
 }

@@ -18,7 +18,7 @@ if (isset($_POST['loginBtn'])) {
         $username = $row['PSN_id'];
 
         $_SESSION['username'] = $username;
-        header("Location: index.php");
+        header("Location: ..\index.php");
         exit();
     }
     else {

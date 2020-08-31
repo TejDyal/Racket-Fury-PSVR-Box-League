@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Racket Fury PSVR Box Leagues</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<?php
+    $header = "Racket Fury PSVR Box Leagues";
+    include ("scripts/includes/head.php");
+    include ("scripts/includes/nav_links.html");
+?>
 
 <body>
     <div class=wrapper>
-
-        <!-- Load navbar links from nav_links.html -->
-        <?php include ("nav_links.html"); ?>
 
         <div class="box b" id="title"> Racket Fury PSVR Box Leagues</div>
         <div class="box c" id="subtitle1">A Racket Fury Non Profit Community Fan Website</div>
@@ -23,7 +16,7 @@
 
         <div class="box e">
             <div id="reg">Regiser your PSN ID and country server to join the leagues</div>
-            <button type="button" id="regBtn" onclick="document.location.href='register.php'">Register</button>
+            <button type="button" id="regBtn" onclick="document.location.href='pages/register.php'">Register</button>
         </div>
 
         <div class="box f">

@@ -1,20 +1,12 @@
 <?php
-include("nav_links.html");
+    $header = "Resgiter into the Players Database";
+    include ("../scripts/includes/head.php");
+    include ("../scripts/includes/nav_links.html");
 
-require 'config\config.php';
-require 'includes\form_handlers\register_handler.php';
-require 'includes\form_handlers\login_handler.php';
-
+    require '../scripts/config/config.php';
+    require '../scripts/includes/form_handlers/register_handler.php';
+    require '../scripts/includes/form_handlers/login_handler.php';
 ?>
-
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resgiter into the Players Database</title>
-    <link rel="stylesheet" href="style.css">
-</head>
 
 <body>
     <!-- Login Form -->
