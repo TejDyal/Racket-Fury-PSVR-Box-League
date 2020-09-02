@@ -1,11 +1,13 @@
 <?php
     $header = "Racket Fury PSVR Box Leagues";
     include ("scripts/includes/head.php");
-    include ("scripts/includes/nav_links.html");
 ?>
 
 <body>
     <div class=wrapper>
+        <?php
+            include ("scripts/includes/nav_links.html");
+        ?>
 
         <div class="box b" id="title"> Racket Fury PSVR Box Leagues</div>
         <div class="box c" id="subtitle1">A Racket Fury Non Profit Community Fan Website</div>
